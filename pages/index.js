@@ -1,22 +1,27 @@
 import Container from "../components/Container";
 import NavBar from "../components/Navbar";
 import Tasks from "../components/Tasks";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTodos } from "../store/actions/todoAction";
+import { useEffect } from "react";
 
-const Index = ({ todo }) => {
+const Home = () => {
+
+  const dispatch = useDispatch();
+  const {todos} =useSelector(state => state.todo);
+
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, []);
+  
   return (
     <>
       <Container>
-        <Tasks tasks={todo} />
+        <Tasks tasks={todos}/>
       </Container>
       <NavBar />
     </>
   );
 };
 
-Index.getInitialProps = async (ctx) => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/todos");
-  const data = await res.json();
-  return { todo: data };
-};
-
-export default Index;
+export default Home;

@@ -1,5 +1,15 @@
 import Container from "../components/Container";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { postTodo } from "../store/actions/todoAction";
 const Create = () => {
+  const dispatch = useDispatch();
+  const { todos } = useSelector((state) => state.todo);
+
+  useEffect(() => {
+    dispatch(postTodo());
+  }, []);
+
   return (
     <Container>
       <div className="taskCard">
@@ -9,43 +19,14 @@ const Create = () => {
               <div className="form-group">
                 <label htmlFor="task">Create a Task</label>
                 <input
-                  type="email"
+                  type="text"
                   className="form-control"
                   id="task"
                   placeholder="Type a task"
                 />
               </div>
-              <button type="submit" className="btn btn-primary" onClick={(e) => {
-                e.preventDefault()
-                const task = document.getElementById("task").value
-
-                if (task.length != 0) {
-
-                  console.log(task)
-                  const res =  fetch('https://jsonplaceholder.typicode.com/todos', {
-                    method: 'POST',
-                    headers:{ 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      userId: 1,
-                      title: task,
-                      completed: false
-                    }),
-                  }).then(res => console.log(res)).catch(err => console.log(err))
-                
-
-                  document.getElementById("task").value = null
-
-                } else {
-                  console.log("no")
-                }
-                // const res = await fetch(API_URL, {
-                //   method: 'POST',
-                //   headers,
-                //   body: JSON.stringify({
-                //     query,
-                //     variables,
-                //   }),
-                // })
+              <button type="submit" className="btn btn-primary" onClick={(e) =>{
+                  e.preventDefault()
               }}>
                 Create
               </button>
