@@ -18,3 +18,13 @@ export const postTodo = (todo) => async (dispatch) => {
     payload: todo,
   });
 };
+export const putTodo = (todo) => async (dispatch) => {
+  const res = await axios.put(`https://jsonplaceholder.typicode.com/todos/${todo.id}`, {
+    data: todo,
+  });
+  console.log(res)
+  dispatch({
+    type: types.PUT_TODO,
+    payload: todo,
+  });
+};

@@ -4,7 +4,7 @@ const Tasks = ({ tasks }) => {
     <>
       <ul>
         {tasks.map((task) => (
-          <li key={task.id}>
+          <li >
             <input type="checkbox" name={task.id} id={task.id} />
             <label
               htmlFor={task.id}
