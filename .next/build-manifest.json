@@ -24,15 +24,7 @@
     "/_polyfills": [
       "static/runtime/polyfills.js"
     ],
-    "/create": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
-    ],
     "/index": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
-    ],
-    "/tasks/[id]": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

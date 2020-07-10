@@ -24,7 +24,7 @@ export const putTodo = (todo) => async (dispatch) => {
       data: todo,
     }
   );
-
+    console.log(res)
   dispatch({
     type: types.PUT_TODO,
     payload: todo,
