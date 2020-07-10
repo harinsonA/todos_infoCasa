@@ -2,7 +2,6 @@ import * as types from "../types";
 
 const initialState = {
   todos: [],
-  todo: {},
   loading: false,
   error: null,
 };
@@ -24,7 +23,7 @@ export const todoReducer = (state = initialState, action) => {
         error: null,
       };
     case types.PUT_TODO:
-      const _todos = [...state.todos];
+      {const _todos = [...state.todos];
       const todos = _todos.map((element) => {
         if (element.id == action.payload.id) {
           return action.payload;
@@ -36,7 +35,18 @@ export const todoReducer = (state = initialState, action) => {
         todos,
         loading: false,
         error: null,
-      };
+      };}
+    case types.DELETE_TODO:
+      {const _todos = [...state.todos];
+      const todos = _todos.filter((element) => {
+        return element.id !== action.payload;
+      });
+      return {
+        ...state,
+        todos,
+        loading: false,
+        error: null,
+      };}
 
     default:
       return state;

@@ -1,23 +1,44 @@
 import { useRouter } from "next/router";
 import Container from "../../components/Container";
+import { useState } from "react";
+import { putTodo, getTask } from "../../store/actions/todoAction";
+import { useDispatch } from "react-redux";
+import Link from "next/link";
 
 const Task = ({ _task }) => {
   const router = useRouter();
   const { id } = router.query;
+  const dispatch = useDispatch();
 
-  const handleClick = (event) => {
+  const [visible, setVisible] = useState(false);
+  const [update, setUpdate] = useState(true);
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    
-    console.log(event.target.parentElement);
-    // const task = event.target.task.value;
-    // if (task && task.length != 0) {
-    //   const object = {
-    //     userId: 1,
-    //     title: task,
-    //     completed: false,
-    //   };
-    //   dispatch(postTodo(object));
-    // }
+    const newTask = event.target.textarea.value;
+    console.log(newTask);
+    if (newTask && newTask.length != 0) {
+      const newobject = {
+        userId: _task.userId,
+        id: _task.id,
+        title: newTask,
+        completed: _task.completed,
+      };
+      dispatch(putTodo(newobject));
+      alert("Data sent");
+    }
+    setVisible(false);
+    setUpdate(true);
+  };
+  const handleClickUpdate = (event) => {
+    event.preventDefault();
+    setVisible(true);
+    setUpdate(false);
+  };
+  const handleClickCancel = (event) => {
+    event.preventDefault();
+    setVisible(false);
+    setUpdate(true);
   };
 
   return (
@@ -25,60 +46,56 @@ const Task = ({ _task }) => {
       <div className="taskCard">
         <div className="card">
           <div className="card-body">
-            <h5 className="card-title">Task: #{_task.id}</h5>
+            <div className="d-flex justify-content-between">
+              <h5 className="card-title">Task: #{_task.id}</h5>
+              <Link href="/">
+                <button className="btn btn-light">
+                  <i className="fas fa-arrow-left"></i>
+                </button>
+              </Link>
+            </div>
             <p className="card-text">
               Description: <br />
               {_task.title}
             </p>
           </div>
           <div className="card-footer">
-            <form>
+            <form onSubmit={(e) => handleSubmit(e)}>
               <div className="d-flex mb-2">
-                <button
-                  id="update"
-                  type="button"
-                  className="btn btn-info "
-                  onClick={(e) => handleClick(e)}
-                >
-                  Update
-                </button>
-                <button
-                  id="save"
-                  type="submit"
-                  className="btn btn-success d-none"
-                  onClick={(e) => {
-                    const update = document.getElementById("update");
-                    const cancel = document.getElementById("cancel");
-                    const textarea = document.getElementById("textarea");
-                    update.classList.remove("d-none");
-                    cancel.classList.add("d-none");
-                    textarea.classList.add("d-none");
-                    e.target.classList.add("d-none");
-                  }}
-                >
-                  save
-                </button>
-                <button
-                  id="cancel"
-                  type="button"
-                  className="btn btn-danger d-none"
-                  onClick={(e) => {
-                    const save = document.getElementById("save");
-                    const update = document.getElementById("update");
-                    const textarea = document.getElementById("textarea");
-                    update.classList.remove("d-none");
-                    save.classList.add("d-none");
-                    textarea.classList.add("d-none");
-                    e.target.classList.add("d-none");
-                  }}
-                >
-                  Cancel
-                </button>
+                {update && (
+                  <button
+                    id="update"
+                    type="button"
+                    className="btn btn-info"
+                    onClick={(e) => handleClickUpdate(e)}
+                  >
+                    Update
+                  </button>
+                )}
+                {visible && (
+                  <div>
+                    <button
+                      id="save"
+                      type="submit"
+                      className="btn btn-success mr-2"
+                    >
+                      Save
+                    </button>
+                    <button
+                      id="cancel"
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={(e) => handleClickCancel(e)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
               </div>
-              <textarea
-                id="textarea"
-                className="form-control d-none"
-              ></textarea>
+
+              {visible && (
+                <textarea id="textarea" className="form-control"></textarea>
+              )}
             </form>
           </div>
         </div>
@@ -88,11 +105,8 @@ const Task = ({ _task }) => {
 };
 
 Task.getInitialProps = async (ctx) => {
-  const res = await fetch(
-    `https://jsonplaceholder.typicode.com/todos/${ctx.query.id}`
-  );
-  const data = await res.json();
-  return { _task: data };
+  const res = await getTask(ctx.query.id);
+  return { _task: res };
 };
 
 export default Task;

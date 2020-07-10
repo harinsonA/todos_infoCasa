@@ -1,5 +1,5 @@
 import Container from "../components/Container";
-import NavBar from "../components/Navbar";
+import Footer from "../components/Footer";
 import Tasks from "../components/Tasks";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTodos } from "../store/actions/todoAction";
@@ -19,7 +19,7 @@ const Home = () => {
       <Container>
         <Tasks tasks={todos}/>
       </Container>
-      <NavBar />
+      <Footer />
     </>
   );
 };
